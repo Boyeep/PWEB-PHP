@@ -1,0 +1,16 @@
+{
+  "base_url": "https://pweb-3ugs330ru-boyeeps.vercel.app",
+  "passed": 8,
+  "checks": [
+    "PHP home renders database records",
+    "Session cookie uses Secure and HttpOnly",
+    "Create returns saved record",
+    "Update is saved",
+    "Later request reads updated data",
+    "Delete confirms success",
+    "Deleted record is absent on later request",
+    "Blog article is available"
+  ],
+  "automation_auth": true,
+  "security_probe_tests": "See local SQLite/MySQL QA reports."
+}

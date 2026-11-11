@@ -64,7 +64,7 @@ python -m pip install beautifulsoup4
 python tests/check_http.py
 ```
 
-Alamat target dapat diubah melalui environment `TEST_BASE_URL`. Pengujian hanya membuat data fiktif pada sesi sendiri dan menghapus data ujinya. Laporan: `qa-report.json` (SQLite), `qa-report-mysql.json` (MySQL/MariaDB), `qa-report-layout.json` (layout dan tanpa JavaScript), `qa-report-durable.json` (snapshot hosting), serta `qa-report-production.json` jika smoke test hosting selesai.
+Alamat target dapat diubah melalui environment `TEST_BASE_URL`. Pengujian hanya membuat data fiktif pada sesi sendiri dan menghapus data ujinya. **26 pemeriksaan SQLite, 26 pemeriksaan MySQL/MariaDB, 26 pemeriksaan layout/interaksi, dan 8 pemeriksaan smoke test hosting lolos.** Laporan: `qa-report.json`, `qa-report-mysql.json`, `qa-report-layout.json`, `qa-report-durable.json`, dan `qa-report-production.json`.
 
 Gunakan `tests/check_smoke.py` untuk pemeriksaan alur normal pada hosting. Pemeriksaan input mirip serangan pada suite lengkap dilakukan lokal karena dapat memicu security checkpoint Vercel. Firewall hosting tetap aktif.
 
