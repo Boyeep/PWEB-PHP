@@ -1,0 +1,7 @@
+.git
+.env*
+storage
+screenshots
+tests
+node_modules
+qa-report.json

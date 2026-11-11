@@ -1,0 +1,32 @@
+{
+  "base_url": "http://127.0.0.1:4189",
+  "passed": 26,
+  "checks": [
+    "Home returns PHP-rendered records",
+    "GET /list-siswa.php",
+    "GET /form-daftar.php",
+    "GET /panduan.php",
+    "CSRF required",
+    "Process endpoint rejects GET",
+    "Server validation keeps errors and old input",
+    "Create persists with success notice",
+    "Stored markup escaped",
+    "Search finds created student on a later request",
+    "Detail renders all fields",
+    "Another session cannot see record",
+    "Another session cannot edit record",
+    "Another session cannot delete record",
+    "GET delete only confirms",
+    "Update persists",
+    "Program filter and search combine",
+    "SQL injection is treated as a search value",
+    "Search wildcard is escaped",
+    "Allowlisted choices validated on server",
+    "Array query rejected safely",
+    "Invalid ID gives 404",
+    "CSRF blocks update",
+    "CSRF blocks deletion",
+    "Delete persists after explicit POST",
+    "Flash notice only shown once"
+  ]
+}

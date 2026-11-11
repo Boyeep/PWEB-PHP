@@ -1,0 +1,8 @@
+<?php require dirname(__DIR__) . '/app/bootstrap.php'; page_start('Panduan','guide'); ?>
+<div class="page-heading"><div><p class="eyebrow">MULAI DARI SINI</p><h1>Data rapi, langkah lebih mudah.</h1><p>Empat langkah untuk mengelola pendaftaran di Admisia.</p></div></div><div class="guide-grid"><?php foreach([
+['01','Tambahkan pendaftar','Buka Tambah pendaftar, lalu isi nama, jenis kelamin, agama, alamat, sekolah asal, dan program keahlian. Semua kolom wajib diisi.'],
+['02','Temukan data dengan cepat','Di Data pendaftar, ketik nama atau sekolah asal. Gunakan filter jurusan dan tekan Terapkan untuk mempersempit hasil.'],
+['03','Periksa dan perbarui','Klik nama untuk melihat detail, atau ikon pensil untuk mengedit. Tekan Simpan perubahan setelah selesai.'],
+['04','Hapus dengan konfirmasi','Klik ikon tempat sampah, periksa nama pendaftar, lalu konfirmasi. Membuka halaman konfirmasi belum menghapus data.']
+] as [$number,$heading,$text]): ?><section class="panel guide-card"><span class="guide-number"><?= $number ?></span><h2><?= $heading ?></h2><p><?= $text ?></p></section><?php endforeach ?></div><section class="info-note"><h2>Tentang ruang demo</h2><p>SMK Cakrawala dan seluruh data awal bersifat fiktif. Setiap sesi browser memiliki ruang data tersendiri. Gunakan data rekaan, bukan identitas siswa nyata. Menghapus cookie atau membuka browser lain akan membuka ruang demo baru.</p><p>Aplikasi ini mencatat pendaftaran dan tidak menentukan kelulusan atau penerimaan siswa.</p><a class="text-link" href="/blog.php">Pelajari cara aplikasi ini dibuat <?= icon('arrow') ?></a></section>
+<?php page_end(); ?>

@@ -1,0 +1,462 @@
+<article
+  lang="id"
+  class="blog-article"
+  style="
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.85;
+    color: #34453b;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 28px 22px;
+    overflow-wrap: anywhere;
+  "
+>
+  <p style="font-size: 13px; color: #7c887a; margin-bottom: 8px">
+    Catatan Proyek Pemrograman Web · PHP
+  </p>
+  <h1
+    style="font-size: 29px; line-height: 1.4; color: #254634; margin: 0 0 22px"
+  >
+    Membuat Aplikasi Pendaftaran Siswa Baru dengan PHP: Admisia
+  </h1>
+  <p>
+    Pada tugas kali ini, saya membuat <strong>Admisia</strong>, aplikasi
+    pendaftaran siswa baru untuk sekolah fiktif SMK Cakrawala. Aplikasi ini
+    memiliki formulir pendaftaran, daftar pendaftar, halaman detail, edit, dan
+    konfirmasi hapus. Berbeda dengan proyek sebelumnya yang menyimpan data di
+    browser, pada proyek ini PHP memproses isian di server dan menggunakan
+    database.
+  </p>
+  <p>
+    Materi tugas berasal dari
+    <a
+      href="https://fajarbaskoro.blogspot.com/2017/04/php-hypertext-prepocessor.html"
+      style="color: #13634e"
+      >PHP — Hypertext Preprocessor dari Fajar Baskoro</a
+    >. Pada bagian latihan terdapat tautan studi kasus pendaftaran siswa baru.
+    Saya menggunakan alur CRUD pada latihan tersebut sebagai dasar, lalu
+    mengembangkan antarmuka dan validasinya.
+  </p>
+  <p>
+    <a
+      href="https://pweb-php.vercel.app"
+      style="color: #13634e; font-weight: bold"
+      >Buka aplikasi Admisia →</a
+    >
+    &nbsp; | &nbsp;
+    <a href="https://github.com/Boyeep/PWEB-PHP" style="color: #13634e"
+      >Lihat source code di GitHub</a
+    >
+  </p>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    1. Memahami Peran PHP di Server
+  </h2>
+  <p>
+    HTML dan CSS menyusun tampilan yang dibaca browser. PHP menerima request,
+    memeriksa input, menjalankan query, lalu mengirimkan HTML sebagai response.
+    Browser menerima hasilnya, bukan source code PHP. JavaScript pada proyek ini
+    hanya membantu navigasi ponsel dan penanda validasi; proses CRUD tetap
+    berjalan tanpa JavaScript.
+  </p>
+  <pre
+    style="
+      background: #f4f7f2;
+      border: 1px solid #dfe7da;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    "
+  ><code>Browser mengirim formulir (POST)
+              ↓
+PHP memeriksa CSRF dan isi formulir
+              ↓
+PDO menjalankan query ke database
+              ↓
+PHP mengarahkan ke daftar pendaftar (303)
+              ↓
+Browser menampilkan data terbaru (GET)</code></pre>
+  <p>
+    Saya menggunakan <strong>Post/Redirect/Get</strong> setelah penyimpanan
+    berhasil. Dengan begitu, memuat ulang halaman daftar tidak mengirim formulir
+    pendaftaran yang sama sekali lagi.
+  </p>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    2. Menyusun Halaman dan Struktur Proyek
+  </h2>
+  <p>
+    Halaman utama berisi ringkasan, statistik dari database, enam pendaftar
+    terbaru, dan pilihan program keahlian. Halaman Data Pendaftar menyediakan
+    pencarian nama atau sekolah asal, filter jurusan, serta paginasi delapan
+    baris. Formulir dipisahkan dari skrip pemrosesnya agar alur request lebih
+    mudah diikuti.
+  </p>
+  <pre
+    style="
+      background: #f4f7f2;
+      border: 1px solid #dfe7da;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    "
+  ><code>PWEB-PHP/
+├── app/
+│   ├── bootstrap.php       # Konfigurasi, sesi, CSRF, validasi
+│   ├── database.php        # Koneksi PDO dan query
+│   ├── layout.php          # Navigasi dan komponen bersama
+│   ├── student-form.php    # Form tambah dan edit
+│   └── blob-session.php    # Penyimpanan demo di Vercel
+├── public/
+│   ├── index.php
+│   ├── list-siswa.php
+│   ├── form-daftar.php
+│   ├── proses-pendaftaran.php
+│   ├── form-edit.php
+│   ├── proses-edit.php
+│   ├── detail.php
+│   ├── hapus.php
+│   ├── panduan.php
+│   ├── blog.php
+│   └── assets/
+├── api/index.php           # Router fungsi PHP Vercel
+├── database/mysql.sql
+├── storage/                # Database lokal, tidak masuk Git
+├── docs/
+└── tests/check_http.py</code></pre>
+  <p>
+    Folder <code>public</code> menjadi document root ketika dijalankan secara
+    lokal. Konfigurasi dan database berada di luar folder publik. Layout bersama
+    dipanggil melalui <code>require</code> sehingga navigasi dan footer
+    konsisten pada setiap halaman.
+  </p>
+  <figure style="margin: 24px 0">
+    <img
+      src="https://raw.githubusercontent.com/Boyeep/PWEB-PHP/main/screenshots/ringkasan-desktop.png"
+      alt="Ringkasan Admisia dengan sidebar, banner hijau, statistik, dan pendaftar terbaru"
+      width="1440"
+      height="1624"
+      loading="lazy"
+      style="
+        width: 100%;
+        height: auto;
+        border: 1px solid #dce5d6;
+        border-radius: 8px;
+      "
+    />
+    <figcaption style="font-size: 13px; color: #7c887a; margin-top: 8px">
+      Tampilan ringkasan. Nama sekolah dan seluruh data contoh bersifat fiktif.
+    </figcaption>
+  </figure>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    3. Membuat Database dan Koneksi PDO
+  </h2>
+  <p>
+    Kolom utama tabel <code>calon_siswa</code> meliputi ID, nama, alamat, jenis
+    kelamin, agama, dan sekolah asal. Saya menambahkan jurusan, waktu
+    pendaftaran, serta <code>workspace_id</code> untuk memisahkan data percobaan
+    setiap sesi pengunjung. Tersedia tiga pilihan jurusan: Rekayasa Perangkat
+    Lunak, Teknik Komputer dan Jaringan, serta Desain Komunikasi Visual.
+  </p>
+  <pre
+    style="
+      background: #f4f7f2;
+      border: 1px solid #dfe7da;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    "
+  ><code>CREATE TABLE calon_siswa (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    workspace_id CHAR(32) NOT NULL,
+    nama VARCHAR(64) NOT NULL,
+    alamat VARCHAR(255) NOT NULL,
+    jenis_kelamin VARCHAR(16) NOT NULL,
+    agama VARCHAR(64) NOT NULL,
+    sekolah_asal VARCHAR(64) NOT NULL,
+    jurusan VARCHAR(64) NOT NULL,
+    created_at DATETIME NOT NULL
+);</code></pre>
+  <p>
+    PDO menyediakan antarmuka koneksi database. Untuk MySQL, konfigurasi dibaca
+    dari environment atau file <code>.env</code> lokal. Contoh dasar berikut
+    menunjukkan pembentukan koneksi tanpa menulis password langsung di source
+    code.
+  </p>
+  <pre
+    style="
+      background: #f4f7f2;
+      border: 1px solid #dfe7da;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    "
+  ><code>$dsn = 'mysql:host=127.0.0.1;dbname=pendaftaran_siswa;charset=utf8mb4';
+$db = new PDO($dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'), [
+    PDO::ATTR_ERRMODE =&gt; PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_EMULATE_PREPARES =&gt; false,
+]);</code></pre>
+  <p>
+    Proyek mendukung <strong>MySQL dan SQLite</strong>. MySQL digunakan dengan
+    mengimpor <code>database/mysql.sql</code> dan mengatur
+    <code>DB_DRIVER=mysql</code>. Pengaturan bawaan memakai SQLite agar bisa
+    langsung dicoba dengan PHP tanpa menyiapkan server database tambahan. Kedua
+    pilihan tetap memproses query melalui PDO di server.
+  </p>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    4. Formulir dan Validasi Input
+  </h2>
+  <p>
+    Formulir mengirim data ke <code>proses-pendaftaran.php</code> dengan metode
+    POST. Setiap input memiliki label dan atribut <code>name</code> agar dapat
+    dibaca melalui <code>$_POST</code>. Validasi HTML membantu pengisian, tetapi
+    PHP tetap memeriksa semua data karena request dapat dikirim tanpa melalui
+    browser.
+  </p>
+  <ul style="padding-left: 24px">
+    <li>Nama dan sekolah asal harus berisi 2–64 karakter.</li>
+    <li>Alamat harus berisi 5–255 karakter.</li>
+    <li>
+      Jenis kelamin, agama, dan jurusan harus cocok dengan pilihan yang
+      tersedia.
+    </li>
+    <li>Input berbentuk array tidak diterima sebagai teks.</li>
+    <li>
+      Request yang mengubah data harus memiliki token CSRF yang sesuai dengan
+      sesi.
+    </li>
+  </ul>
+  <p>
+    Jika validasi gagal, aplikasi menampilkan penjelasan pada kolom yang perlu
+    diperbaiki dan mempertahankan input sebelumnya. Pesan sukses baru
+    ditampilkan setelah penyimpanan selesai.
+  </p>
+  <figure style="margin: 24px 0">
+    <img
+      src="https://raw.githubusercontent.com/Boyeep/PWEB-PHP/main/screenshots/form-desktop.png"
+      alt="Form pendaftaran Admisia dengan data diri dan informasi pendidikan"
+      width="1440"
+      height="1233"
+      loading="lazy"
+      style="
+        width: 100%;
+        height: auto;
+        border: 1px solid #dce5d6;
+        border-radius: 8px;
+      "
+    />
+    <figcaption style="font-size: 13px; color: #7c887a; margin-top: 8px">
+      Formulir tambah pendaftar. Form edit menggunakan komponen yang sama dengan
+      nilai awal dari database.
+    </figcaption>
+  </figure>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    5. Menerapkan Create, Read, Update, dan Delete
+  </h2>
+  <p>
+    <strong>Create</strong> menggunakan INSERT setelah input dinyatakan valid.
+    <strong>Read</strong> menggunakan SELECT untuk menampilkan daftar dan
+    detail. <strong>Update</strong> membaca data berdasarkan ID, menampilkan
+    form edit, lalu menjalankan UPDATE. <strong>Delete</strong> memiliki halaman
+    konfirmasi dan hanya menjalankan DELETE melalui POST.
+  </p>
+  <pre
+    style="
+      background: #f4f7f2;
+      border: 1px solid #dfe7da;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    "
+  ><code>// Contoh query update dari aplikasi.
+$query = db()-&gt;prepare(
+    'UPDATE calon_siswa
+     SET nama=?, alamat=?, jenis_kelamin=?, agama=?, sekolah_asal=?, jurusan=?
+     WHERE id=? AND workspace_id=?'
+);
+$query-&gt;execute([
+    $data['nama'], $data['alamat'], $data['jenis_kelamin'],
+    $data['agama'], $data['sekolah_asal'], $data['jurusan'],
+    $id, $_SESSION['workspace']
+]);</code></pre>
+  <p>
+    Nilai input dikirim terpisah melalui <strong>prepared statement</strong>,
+    sehingga tidak digabungkan langsung ke string SQL. Semua query data juga
+    membatasi <code>workspace_id</code>. Mengganti ID di URL tidak memberi akses
+    ke ruang demo pengunjung lain.
+  </p>
+  <p>
+    Saat menampilkan teks ke HTML, aplikasi memakai
+    <code>htmlspecialchars()</code>. Contohnya, teks yang menyerupai tag script
+    akan tampil sebagai tulisan, bukan dijalankan oleh browser. Pencarian juga
+    meng-escape karakter wildcard agar tanda persen diperlakukan sebagai
+    karakter pencarian biasa.
+  </p>
+  <figure style="margin: 24px 0">
+    <img
+      src="https://raw.githubusercontent.com/Boyeep/PWEB-PHP/main/screenshots/data-desktop.png"
+      alt="Tabel data pendaftar dengan kolom sekolah, jurusan, tanggal, dan tindakan edit atau hapus"
+      width="1440"
+      height="1100"
+      loading="lazy"
+      style="
+        width: 100%;
+        height: auto;
+        border: 1px solid #dce5d6;
+        border-radius: 8px;
+      "
+    />
+    <figcaption style="font-size: 13px; color: #7c887a; margin-top: 8px">
+      Pencarian, filter jurusan, detail, edit, dan hapus pada halaman Data
+      Pendaftar.
+    </figcaption>
+  </figure>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    6. Menyesuaikan Tampilan Ponsel
+  </h2>
+  <p>
+    Tampilan menggunakan warna hijau, bidang putih, dan font Inter lokal. Pada
+    layar kecil, sidebar dibuka melalui tombol menu, form berubah menjadi satu
+    kolom, dan tabel dapat digeser secara horizontal. Tombol memiliki area tekan
+    yang cukup besar serta penanda fokus untuk navigasi keyboard. Preferensi
+    reduced motion juga dihormati.
+  </p>
+  <figure style="margin: 24px auto; max-width: 390px">
+    <img
+      src="https://raw.githubusercontent.com/Boyeep/PWEB-PHP/main/screenshots/ringkasan-mobile.png"
+      alt="Tampilan ringkasan Admisia pada ponsel"
+      width="390"
+      height="844"
+      loading="lazy"
+      style="
+        width: 100%;
+        height: auto;
+        border: 1px solid #dce5d6;
+        border-radius: 8px;
+      "
+    />
+    <figcaption style="font-size: 13px; color: #7c887a; margin-top: 8px">
+      Navigasi dan ringkasan pada layar ponsel.
+    </figcaption>
+  </figure>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    7. Menjalankan dan Menguji Aplikasi
+  </h2>
+  <p>
+    Untuk menjalankan aplikasi, clone repository lalu gunakan built-in server
+    PHP. Folder <code>public</code> harus menjadi document root. Tidak ada
+    proses build frontend dan tidak ada dependensi Composer.
+  </p>
+  <pre
+    style="
+      background: #f4f7f2;
+      border: 1px solid #dfe7da;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.7;
+    "
+  ><code>git clone https://github.com/Boyeep/PWEB-PHP.git
+cd PWEB-PHP
+php -S localhost:8000 -t public</code></pre>
+  <p>
+    Jika memakai XAMPP di Windows, perintah PHP dapat diganti menjadi
+    <code>C:\xampp\php\php.exe</code>. Untuk MySQL, jalankan MySQL, impor file
+    SQL, salin <code>.env.example</code> menjadi <code>.env</code>, lalu
+    sesuaikan konfigurasinya. Jangan unggah file berisi kredensial ke GitHub.
+  </p>
+  <p>
+    Pengujian HTTP mencakup pembuatan data, pembacaan pada request berikutnya,
+    perubahan, penghapusan, pencarian, filter, input tidak valid, CSRF, teks
+    mirip HTML, serta akses ID dari sesi berbeda. Hasil pemeriksaan tersedia di
+    repository pada berkas laporan QA.
+  </p>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    8. Deploy ke Vercel
+  </h2>
+  <p>
+    Versi online memakai PHP melalui runtime komunitas <code>vercel-php</code>.
+    File <code>api/index.php</code> membatasi routing ke daftar halaman yang
+    diizinkan. Kode PHP tetap berjalan di server.
+  </p>
+  <p>
+    Filesystem fungsi serverless bersifat sementara, sehingga file SQLite di
+    dalam proses saja tidak cukup untuk menyimpan data. Pada demo ini, snapshot
+    SQLite dan sesi disimpan pada <strong>Vercel Blob privat</strong>, lalu
+    dimuat kembali pada request berikutnya. Penulisan memakai ETag agar
+    perubahan dari dua request tidak saling menimpa diam-diam. Snapshot demo
+    diberi masa simpan tujuh hari.
+  </p>
+  <p>
+    Ini adalah solusi untuk demo kecil dengan maksimal 100 pendaftar per ruang.
+    Untuk penggunaan operasional sekolah, konfigurasi MySQL di server PHP biasa
+    lebih sesuai. Demo ini tidak memiliki sistem akun petugas, tidak menerima
+    data siswa nyata, dan tidak melakukan seleksi penerimaan.
+  </p>
+  <p>
+    Source code, skema MySQL, panduan, screenshot, dan artikel tersedia di
+    <a href="https://github.com/Boyeep/PWEB-PHP" style="color: #13634e"
+      >repository PWEB-PHP</a
+    >. Aplikasi dapat dicoba melalui
+    <a href="https://pweb-php.vercel.app" style="color: #13634e">demo Admisia</a
+    >.
+  </p>
+
+  <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
+    Referensi
+  </h2>
+  <ul style="padding-left: 24px">
+    <li>
+      <a
+        href="https://fajarbaskoro.blogspot.com/2017/04/php-hypertext-prepocessor.html"
+        style="color: #13634e"
+        >Fajar Baskoro — Materi PHP dan latihan pendaftaran siswa baru</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.petanikode.com/tutorial-php-mysql/"
+        style="color: #13634e"
+        >Petani Kode — Studi kasus CRUD pendaftaran siswa baru</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.php.net/manual/en/book.pdo.php"
+        style="color: #13634e"
+        >PHP Manual — PDO</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://www.php.net/manual/en/function.htmlspecialchars.php"
+        style="color: #13634e"
+        >PHP Manual — htmlspecialchars</a
+      >
+    </li>
+    <li>
+      <a href="https://github.com/vercel-community/php" style="color: #13634e"
+        >Runtime PHP untuk Vercel</a
+      >
+    </li>
+    <li>
+      <a
+        href="https://vercel.com/docs/vercel-blob/using-blob-sdk"
+        style="color: #13634e"
+        >Vercel Blob — Private storage dan conditional writes</a
+      >
+    </li>
+  </ul>
+</article>

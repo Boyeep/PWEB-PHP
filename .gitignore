@@ -1,0 +1,12 @@
+.env
+.vercel/
+node_modules/
+storage/*
+!storage/.gitkeep
+test-results/
+*.zip
+*.tar.gz
+
+.vercel
+.env*
+!.env.example
