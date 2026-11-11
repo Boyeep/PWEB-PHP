@@ -13,7 +13,7 @@
   "
 >
   <p style="font-size: 13px; color: #7c887a; margin-bottom: 8px">
-    Catatan Proyek Pemrograman Web · PHP
+    Catatan Pengembangan · PHP
   </p>
   <h1
     style="font-size: 29px; line-height: 1.4; color: #254634; margin: 0 0 22px"
@@ -21,22 +21,12 @@
     Membuat Aplikasi Pendaftaran Siswa Baru dengan PHP: Admisia
   </h1>
   <p>
-    Pada tugas kali ini, saya membuat <strong>Admisia</strong>, aplikasi
+    Saya membuat <strong>Admisia</strong>, aplikasi
     pendaftaran siswa baru untuk sekolah fiktif SMK Cakrawala. Aplikasi ini
     memiliki formulir pendaftaran, daftar pendaftar, halaman detail, edit, dan
     konfirmasi hapus. Berbeda dengan proyek sebelumnya yang menyimpan data di
     browser, pada proyek ini PHP memproses isian di server dan menggunakan
     database.
-  </p>
-  <p>
-    Materi tugas berasal dari
-    <a
-      href="https://fajarbaskoro.blogspot.com/2017/04/php-hypertext-prepocessor.html"
-      style="color: #13634e"
-      >PHP — Hypertext Preprocessor dari Fajar Baskoro</a
-    >. Pada bagian latihan terdapat tautan studi kasus pendaftaran siswa baru.
-    Saya menggunakan alur CRUD pada latihan tersebut sebagai dasar, lalu
-    mengembangkan antarmuka dan validasinya.
   </p>
   <p>
     <a
@@ -221,8 +211,8 @@ $db = new PDO($dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'), [
     browser.
   </p>
   <ul style="padding-left: 24px">
-    <li>Nama dan sekolah asal harus berisi 2–64 karakter.</li>
-    <li>Alamat harus berisi 5–255 karakter.</li>
+    <li>Nama dan sekolah asal harus berisi 2-64 karakter.</li>
+    <li>Alamat harus berisi 5-255 karakter.</li>
     <li>
       Jenis kelamin, agama, dan jurusan harus cocok dengan pilihan yang
       tersedia.
@@ -415,35 +405,21 @@ php -S localhost:8000 -t public</code></pre>
   </p>
 
   <h2 style="font-size: 23px; color: #254634; margin: 32px 0 12px">
-    Referensi
+    Dokumentasi Teknologi
   </h2>
   <ul style="padding-left: 24px">
     <li>
       <a
-        href="https://fajarbaskoro.blogspot.com/2017/04/php-hypertext-prepocessor.html"
-        style="color: #13634e"
-        >Fajar Baskoro — Materi PHP dan latihan pendaftaran siswa baru</a
-      >
-    </li>
-    <li>
-      <a
-        href="https://www.petanikode.com/tutorial-php-mysql/"
-        style="color: #13634e"
-        >Petani Kode — Studi kasus CRUD pendaftaran siswa baru</a
-      >
-    </li>
-    <li>
-      <a
         href="https://www.php.net/manual/en/book.pdo.php"
         style="color: #13634e"
-        >PHP Manual — PDO</a
+        >PHP Manual - PDO</a
       >
     </li>
     <li>
       <a
         href="https://www.php.net/manual/en/function.htmlspecialchars.php"
         style="color: #13634e"
-        >PHP Manual — htmlspecialchars</a
+        >PHP Manual - htmlspecialchars</a
       >
     </li>
     <li>
@@ -455,7 +431,7 @@ php -S localhost:8000 -t public</code></pre>
       <a
         href="https://vercel.com/docs/vercel-blob/using-blob-sdk"
         style="color: #13634e"
-        >Vercel Blob — Private storage dan conditional writes</a
+        >Vercel Blob - Private storage dan conditional writes</a
       >
     </li>
   </ul>

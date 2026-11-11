@@ -42,7 +42,7 @@ csrf = token(form)
 ok('CSRF required', request(c, '/proses-pendaftaran.php', {'nama':'Test'})[0] == 403)
 ok('Process endpoint rejects GET', request(c, '/proses-pendaftaran.php')[0] == 405)
 status, body, _ = request(c, '/proses-pendaftaran.php', {'csrf':csrf, 'nama':'A'})
-ok('Server validation keeps errors and old input', 'Data belum tersimpan' in body and '2–64 karakter' in body and parse(body).select_one('#nama')['value'] == 'A')
+ok('Server validation keeps errors and old input', 'Data belum tersimpan' in body and '2-64 karakter' in body and parse(body).select_one('#nama')['value'] == 'A')
 record = {'csrf':csrf,'nama':'QA Siswa <script>alert(1)</script>','alamat':'Jl. Contoh No. 123, Surabaya','jenis_kelamin':'Perempuan','agama':'Islam','sekolah_asal':'SMP Uji Fiktif','jurusan':'Rekayasa Perangkat Lunak'}
 status, body, _ = request(c, '/proses-pendaftaran.php', record)
 ok('Create persists with success notice', status == 200 and 'berhasil disimpan' in body and len(parse(body).select('tbody tr')) == 7)

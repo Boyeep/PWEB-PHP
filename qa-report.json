@@ -1,6 +1,8 @@
 {
   "base_url": "http://127.0.0.1:4188",
   "passed": 26,
+  "automation_auth": false,
+  "firewall_probe_tests": "included",
   "checks": [
     "Home returns PHP-rendered records",
     "GET /list-siswa.php",

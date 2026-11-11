@@ -1,6 +1,6 @@
 # PWEB-PHP · Admisia
 
-Aplikasi CRUD pendaftaran siswa baru menggunakan PHP, PDO, HTML, CSS, dan sedikit JavaScript. Studi kasus dari [materi PHP Fajar Baskoro](https://fajarbaskoro.blogspot.com/2017/04/php-hypertext-prepocessor.html) dan latihan pendaftaran siswa baru yang ditautkan pada materi tersebut.
+Aplikasi CRUD pendaftaran siswa baru menggunakan PHP, PDO, HTML, CSS, dan sedikit JavaScript.
 
 - **Demo:** https://pweb-php.vercel.app
 - **Artikel:** https://pweb-php.vercel.app/blog.php
@@ -53,7 +53,7 @@ Jangan unggah `.env`, `.env.local`, token, file database, atau direktori `.verce
 
 ## Struktur
 
-`app/` memuat bootstrap, database, layout, form bersama, serta adapter penyimpanan hosting. `public/` memuat halaman dan skrip pemroses. `database/` berisi skema MySQL; `docs/` memuat artikel Blogger dan catatan tugas; `tests/` berisi pemeriksaan HTTP.
+`app/` memuat bootstrap, database, layout, form bersama, serta adapter penyimpanan hosting. `public/` memuat halaman dan skrip pemroses. `database/` berisi skema MySQL; `docs/` memuat artikel Blogger dan catatan pengembangan; `tests/` berisi pemeriksaan HTTP.
 
 ## Verifikasi
 

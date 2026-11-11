@@ -30,7 +30,7 @@ function page_start(string $title, string $active = 'overview'): void {
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Admisia, aplikasi pendaftaran siswa baru berbasis PHP. Kelola pendaftaran, cari data, dan perbarui informasi siswa.">
-  <title><?= e($title) ?> — Admisia</title>
+  <title><?= e($title) ?> - Admisia</title>
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="/assets/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/style.css"><script src="/assets/app.js" defer></script>

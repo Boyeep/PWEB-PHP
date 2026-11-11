@@ -54,7 +54,7 @@ function validate_student(array $source): array {
     foreach (['nama', 'alamat', 'sekolah_asal', 'jenis_kelamin', 'agama', 'jurusan'] as $key) $data[$key] = input($key, $source);
     foreach (['nama' => [2,64,'Nama lengkap'], 'alamat' => [5,255,'Alamat'], 'sekolah_asal' => [2,64,'Sekolah asal']] as $key => [$min,$max,$label]) {
         $length = mb_strlen($data[$key]);
-        if ($length < $min || $length > $max) $errors[$key] = "$label harus berisi {$min}–{$max} karakter.";
+        if ($length < $min || $length > $max) $errors[$key] = "$label harus berisi {$min}-{$max} karakter.";
     }
     foreach (['jenis_kelamin' => GENDERS, 'agama' => RELIGIONS, 'jurusan' => PROGRAMS] as $key => $choices) {
         if (!in_array($data[$key], $choices, true)) $errors[$key] = 'Pilih salah satu pilihan yang tersedia.';
