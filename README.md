@@ -64,6 +64,8 @@ python -m pip install beautifulsoup4
 python tests/check_http.py
 ```
 
-Alamat target dapat diubah melalui environment `TEST_BASE_URL`. Pengujian hanya membuat data fiktif pada sesi sendiri dan menghapus data ujinya. Laporan tersimpan sebagai `qa-report.json` (lokal) dan `qa-report-production.json` (hosting).
+Alamat target dapat diubah melalui environment `TEST_BASE_URL`. Pengujian hanya membuat data fiktif pada sesi sendiri dan menghapus data ujinya. Laporan: `qa-report.json` (SQLite), `qa-report-mysql.json` (MySQL/MariaDB), `qa-report-layout.json` (layout dan tanpa JavaScript), `qa-report-durable.json` (snapshot hosting), serta `qa-report-production.json` jika smoke test hosting selesai.
+
+Gunakan `tests/check_smoke.py` untuk pemeriksaan alur normal pada hosting. Pemeriksaan input mirip serangan pada suite lengkap dilakukan lokal karena dapat memicu security checkpoint Vercel. Firewall hosting tetap aktif.
 
 Font Inter disimpan lokal dengan lisensi OFL pada `public/assets/OFL.txt`. Ilustrasi formulir dibuat menggunakan CSS dan ikon SVG di dalam kode; aplikasi tidak memerlukan CDN.

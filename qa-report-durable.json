@@ -1,0 +1,12 @@
+{
+  "private_store": "pweb-php-data",
+  "verified_completed_crud_sessions": 1,
+  "checks": [
+    {
+      "persisted_rows": 6,
+      "test_record_deleted": true,
+      "success_notice_saved": true
+    }
+  ],
+  "public_automation_limit": "Vercel security checkpoint triggered by security test payloads; no firewall protections disabled."
+}
